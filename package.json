@@ -1,0 +1,23 @@
+{
+  "name": "nf-test",
+  "version": "0.0.1",
+  "description": "Test Raw Netflow Data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/delian/nf-test.git"
+  },
+  "author": "Delian Delchev <delian.delchev@gmail.com> (http://delian.blogspot.com/)",
+  "license": "GPLv2",
+  "bugs": {
+    "url": "https://github.com/delian/nf-test/issues"
+  },
+  "homepage": "https://github.com/delian/nf-test",
+  "dependencies": {
+    "http": "0.0.0",
+    "node-netflowv9": "0.0.11"
+  }
+}
