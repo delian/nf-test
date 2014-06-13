@@ -22,9 +22,11 @@ function refresh() {
 };
 refresh();
 
-var readChunkLen = 1000000;
-
+var readChunkLen = 10000000;
 var dir = 'dump';
+var templates = {};
+var cntPkts = 0;
+var cntFlows = 0;
 
 // In 5 sec we will have the NETS
 fs.readdirSync('dump').filter(function(n) { return /\.bin/.test(n) }).forEach(function(file) {
@@ -40,7 +42,7 @@ fs.readdirSync('dump').filter(function(n) { return /\.bin/.test(n) }).forEach(fu
         console.log('got',buffer.length);
 
         // Now let us decode the buffer data
-        while(1) {
+        while(buffer.length) {
             var rheader = buffer.slice(0,14);
             var ts = rheader.readUInt32BE(0)*1000 + rheader.readUInt16BE(4);
             var raddress = rheader.readUInt32BE(6);
@@ -48,8 +50,11 @@ fs.readdirSync('dump').filter(function(n) { return /\.bin/.test(n) }).forEach(fu
             var plen = rheader.readUInt16BE(12);
             if (buffer.length>=14+plen) {
                 var packet = buffer.slice(14,14+plen);
-                var o = nf.nfPktDecode(packet);
-                console.log(ts,':',o);
+                var o = nf.nfPktDecode(packet,templates);
+                cntPkts++;
+                cntFlows+= o.flows.length;
+                console.log(o);
+                //console.log(ts,':',o);
                 buffer = buffer.slice(14+plen);
             } else break;
         }
@@ -57,3 +62,5 @@ fs.readdirSync('dump').filter(function(n) { return /\.bin/.test(n) }).forEach(fu
 
     fs.closeSync(f);
 });
+
+console.log('Count of packets',cntPkts,'flows',cntFlows);
